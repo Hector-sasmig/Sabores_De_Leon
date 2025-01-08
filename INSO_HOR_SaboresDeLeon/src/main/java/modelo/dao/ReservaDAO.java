@@ -11,10 +11,12 @@ public class ReservaDAO extends Conexion {
 
     public ArrayList<ReservaVO> getLista() throws Exception {
         ArrayList<ReservaVO> reservas = new ArrayList<ReservaVO>();
+        
         try {
             this.abrirConexion();
             PreparedStatement st = this.getConnection().prepareStatement("SELECT * FROM RESERVA");
             ResultSet rs = st.executeQuery();
+            
             while (rs.next()) {
                 ReservaVO reserva = new ReservaVO(
                     rs.getString("Nombre"), 
@@ -28,21 +30,26 @@ public class ReservaDAO extends Conexion {
                 reserva.setIdReserva(rs.getInt("id"));  // Asignar el id correcto
                 reservas.add(reserva);
             }
+            
         } catch (Exception e) {
             throw new Exception("Error al obtener la lista de reservas: " + e.getMessage(), e);
+            
         } finally {
             this.cerrarConexion();
         }
+        
         return reservas;
     }
 
     public ReservaVO getReserva(int id) throws Exception {
         ReservaVO reserva = null;
+        
         try {
             this.abrirConexion();
             PreparedStatement st = this.getConnection().prepareStatement("SELECT * FROM RESERVA WHERE id = ?");
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
+            
             if (rs.next()) {
                 reserva = new ReservaVO(
                     rs.getString("Nombre"), 
@@ -55,11 +62,14 @@ public class ReservaDAO extends Conexion {
                 );
                 reserva.setIdReserva(rs.getInt("id"));
             }
+            
         } catch (Exception e) {
             throw new Exception("Error al obtener la reserva con id " + id + ": " + e.getMessage(), e);
+        
         } finally {
             this.cerrarConexion();
         }
+        
         return reserva;
     }
 
@@ -69,6 +79,7 @@ public class ReservaDAO extends Conexion {
             PreparedStatement st = this.getConnection().prepareStatement(
                 "INSERT INTO RESERVA (Nombre, Apellido, dni, Telefono, Correo, Comensales, FechaHora) VALUES (?, ?, ?, ?, ?, ?, ?)"
             );
+            
             st.setString(1, reserva.getNombre());
             st.setString(2, reserva.getApellido());
             st.setString(3, reserva.getDni());
@@ -81,8 +92,10 @@ public class ReservaDAO extends Conexion {
             if (rowsAffected == 0) {
                 throw new Exception("No se pudo insertar la reserva.");
             }
+        
         } catch (Exception e) {
             throw new Exception("Error al insertar la reserva: " + e.getMessage(), e);
+       
         } finally {
             this.cerrarConexion();
         }
@@ -94,6 +107,7 @@ public class ReservaDAO extends Conexion {
             PreparedStatement st = this.getConnection().prepareStatement(
                 "UPDATE RESERVA SET Nombre = ?, Apellido = ?, dni = ?, Telefono = ?, Correo = ?, Comensales = ?, FechaHora = ? WHERE id = ?"
             );
+           
             st.setString(1, reservaVO.getNombre());
             st.setString(2, reservaVO.getApellido());
             st.setString(3, reservaVO.getDni());
@@ -107,8 +121,10 @@ public class ReservaDAO extends Conexion {
             if (rowsAffected == 0) {
                 throw new Exception("No se pudo actualizar la reserva con id: " + reservaVO.getIdReserva());
             }
+       
         } catch (Exception e) {
             throw new Exception("Error al actualizar la reserva con id: " + reservaVO.getIdReserva() + ": " + e.getMessage(), e);
+       
         } finally {
             this.cerrarConexion();
         }
@@ -124,8 +140,10 @@ public class ReservaDAO extends Conexion {
             if (rowsAffected == 0) {
                 throw new Exception("No se pudo eliminar la reserva con id: " + id);
             }
+       
         } catch (Exception e) {
             throw new Exception("Error al eliminar la reserva con id: " + id + ": " + e.getMessage(), e);
+        
         } finally {
             this.cerrarConexion();
         }

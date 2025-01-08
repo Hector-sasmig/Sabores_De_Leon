@@ -9,14 +9,21 @@ import main.java.modelo.vo.MenuVO;
 
 public class MenuDAO extends Conexion {
 
+    // Obtiene la lista completa de menús
     public ArrayList<MenuVO> getLista() throws Exception {
         try {
             this.abrirConexion();
             PreparedStatement st = this.getConnection().prepareStatement("SELECT * FROM MENU");
             ResultSet rs = st.executeQuery();
-            ArrayList<MenuVO> menus = new ArrayList<MenuVO>();
+            ArrayList<MenuVO> menus = new ArrayList<>();
             while (rs.next()) {
-                MenuVO menu = new MenuVO(rs.getString("PrimerPlato"), rs.getString("SegundoPlato"), rs.getString("Postre"), rs.getString("Bebida"), rs.getFloat("Precio"));
+                MenuVO menu = new MenuVO(
+                    rs.getString("PrimerPlato"), 
+                    rs.getString("SegundoPlato"), 
+                    rs.getString("Postre"), 
+                    rs.getString("Bebida"), 
+                    rs.getFloat("Precio")
+                );
                 menu.setIdMenu(rs.getInt("id"));
                 menus.add(menu);
             }
@@ -27,6 +34,7 @@ public class MenuDAO extends Conexion {
         }
     }
 
+    // Obtiene un menú específico por su ID
     public MenuVO getMenu(int id) throws Exception {
         try {
             this.abrirConexion();
@@ -34,8 +42,14 @@ public class MenuDAO extends Conexion {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             MenuVO menu = null;
-            while (rs.next()) {
-                menu = new MenuVO(rs.getString("PrimerPlato"), rs.getString("SegundoPlato"), rs.getString("Postre"), rs.getString("Bebida"), rs.getFloat("Precio"));
+            if (rs.next()) {
+                menu = new MenuVO(
+                    rs.getString("PrimerPlato"), 
+                    rs.getString("SegundoPlato"), 
+                    rs.getString("Postre"), 
+                    rs.getString("Bebida"), 
+                    rs.getFloat("Precio")
+                );
                 menu.setIdMenu(rs.getInt("id"));
             }
             this.cerrarConexion();
@@ -45,11 +59,13 @@ public class MenuDAO extends Conexion {
         }
     }
 
+    // Agrega un nuevo menú a la base de datos
     public void add(MenuVO menu) throws Exception {
         try {
             this.abrirConexion();
             PreparedStatement st = this.getConnection().prepareStatement(
-                    "INSERT INTO MENU (PrimerPlato, SegundoPlato, Postre, Bebida, Precio) VALUES(?, ?, ?, ?, ?)");
+                "INSERT INTO MENU (PrimerPlato, SegundoPlato, Postre, Bebida, Precio) VALUES (?, ?, ?, ?, ?)"
+            );
             st.setString(1, menu.getPrimerPlato());
             st.setString(2, menu.getSegundoPlato());
             st.setString(3, menu.getPostre());
@@ -66,11 +82,13 @@ public class MenuDAO extends Conexion {
         }
     }
 
+    // Actualiza un menú existente en la base de datos
     public void update(MenuVO menu) throws Exception {
         try {
             this.abrirConexion();
             PreparedStatement st = this.getConnection().prepareStatement(
-                    "UPDATE MENU SET PrimerPlato = ?, SegundoPlato = ?, Postre = ?, Bebida = ?, Precio = ? WHERE id = ?");
+                "UPDATE MENU SET PrimerPlato = ?, SegundoPlato = ?, Postre = ?, Bebida = ?, Precio = ? WHERE id = ?"
+            );
             st.setString(1, menu.getPrimerPlato());
             st.setString(2, menu.getSegundoPlato());
             st.setString(3, menu.getPostre());
@@ -82,9 +100,28 @@ public class MenuDAO extends Conexion {
             if (rowsAffected == 0) {
                 throw new Exception("No se pudo actualizar el menú con id: " + menu.getIdMenu());
             }
-            this.cerrarConexion();
         } catch (Exception e) {
             throw new Exception("Error al actualizar el menú con id: " + menu.getIdMenu() + ": " + e.getMessage(), e);
+        
+        } finally {
+            this.cerrarConexion();
+        }
+    }
+
+    // Elimina un menú de la base de datos por su ID
+    public void delete(int id) throws Exception {
+        try {
+            this.abrirConexion();
+            PreparedStatement st = this.getConnection().prepareStatement("DELETE FROM MENU WHERE id = ?");
+            st.setInt(1, id);
+            
+            int rowsAffected = st.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new Exception("No se pudo eliminar el menú con id: " + id);
+            }
+            this.cerrarConexion();
+        } catch (Exception e) {
+            throw new Exception("Error al eliminar el menú con id: " + id + ": " + e.getMessage(), e);
         }
     }
 }
