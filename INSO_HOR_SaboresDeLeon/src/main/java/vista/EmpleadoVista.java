@@ -1,16 +1,28 @@
 package main.java.vista;
 
-import main.java.controladores.EmpleadoControlador;
-import main.java.modelo.vo.EmpleadoVO;
-import main.java.modelo.vo.MenuVO;
-import main.java.modelo.vo.ReservaVO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import main.java.controladores.EmpleadoControlador;
+import main.java.modelo.vo.MenuVO;
+import main.java.modelo.vo.ReservaVO;
 
 public class EmpleadoVista extends JFrame implements ActionListener{
 
@@ -20,20 +32,19 @@ public class EmpleadoVista extends JFrame implements ActionListener{
     private JTabbedPane pestanasPrincipales;
     private JPanel panelReservas, panelMenus, panelCerrarSesion;
     private JTabbedPane pestanasReservas;
-    JButton aniadir, actualizar, eliminar, botonSeleccion, botonSeleccionEliminar;
-	JTextField nombre, apellido, dni, numTelefono, correoElectronico, comensales, fechaHora;
+    JButton aniadir, actualizar, eliminar, botonSeleccion, botonSeleccionEliminar, btnCerrarSesion;
+    ReservaVO r;
+    JTextField nombre, apellido, dni, numTelefono, correoElectronico, comensales, fechaHora;
 	JTextField nombreEd, apellidoEd, dniEd, numTelefonoEd, correoElectronicoEd, comensalesEd, fechaHoraEd;
-	ReservaVO r;
+	JTextField nombreEdEl, apellidoEdEl, dniEdEl, numTelefonoEdEl, correoElectronicoEdEl, comensalesEdEl, fechaHoraEdEl;
 	MenuVO m;
-	EmpleadoVO em;
-	JTable catalogTable, catalogueTable;
-    private JButton btnCerrarSesion;
+	JTable catalogTable;
 
     public EmpleadoVista() {
         this.empleadoControlador = new EmpleadoControlador();
 
-        setTitle("Empleado - Sistema de Reservas");
-        setSize(800, 500);
+        setTitle("Sistema de Empleado");
+        setSize(900, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Crear el TabbedPane principal
@@ -49,13 +60,17 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 
         // Panel de Menús
         panelMenus = new JPanel();
-        panelMenus.setBackground(new Color(190, 148, 250));
         panelMenus = crearPanelMostrarMenu();
-
+        panelMenus.setBackground(new Color(190, 148, 250));
+        panelMenus.setVisible(true);
 
         // Panel de Cerrar Sesión
         panelCerrarSesion = new JPanel();
+        panelCerrarSesion.setBackground(new Color(190, 148, 250));
+        panelCerrarSesion.setLayout(new FlowLayout(FlowLayout.CENTER));
+        
         btnCerrarSesion = new JButton("Cerrar sesión");
+        btnCerrarSesion.setPreferredSize(new Dimension(200, 50));
         btnCerrarSesion.addActionListener(this);
         panelCerrarSesion.add(btnCerrarSesion);
 
@@ -84,7 +99,7 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 	
 	private JPanel crearPanelMostrarReserva() {
 		JPanel panelMostrarReserva = new JPanel(new BorderLayout());
-		panelMostrarReserva.setPreferredSize(new Dimension(700, 100));
+		panelMostrarReserva.setPreferredSize(new Dimension(700, 200));
 	    actualizarListaReserva(panelMostrarReserva);
 	    return panelMostrarReserva;
 		
@@ -127,6 +142,7 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 	    
 	    if (pestanasReservas.getTabCount() > 0) {
 	    	pestanasReservas.setComponentAt(0, panelActualizado);
+	    	
 	    } else {
 	    	pestanasReservas.addTab("Lista Reservas", panelActualizado);
 	    }
@@ -195,7 +211,7 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 		JLabel numTelefonoLabel = new JLabel("Numero de telefono");
 		JLabel correoElectronicoLabel = new JLabel("Correo Electronico");
 		JLabel comensalesLabel = new JLabel("Número de comensales");
-		JLabel fechaHoraLabel = new JLabel("Fecha y Hora");;
+		JLabel fechaHoraLabel = new JLabel("Fecha y Hora");
 		
 		actualizar = new JButton("Actualizar Datos");
 			
@@ -257,7 +273,7 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 		JLabel numTelefonoLabel = new JLabel("Numero de telefono");
 		JLabel correoElectronicoLabel = new JLabel("Correo Electronico");
 		JLabel comensalesLabel = new JLabel("Número de comensales");
-		JLabel fechaHoraLabel = new JLabel("Fecha y Hora");;
+		JLabel fechaHoraLabel = new JLabel("Fecha y Hora");
 		
 		eliminar = new JButton("Eliminar Reserva");
 			
@@ -266,39 +282,39 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 		panelReservas.setLayout(new GridLayout(8, 2, 10, 10));
 			
 		panelReservas.add(nombreLabel);
-		nombreEd = new JTextField(20);
-		panelReservas.add(nombreEd);
-		nombreEd.setEditable(false);
+		nombreEdEl = new JTextField(20);
+		panelReservas.add(nombreEdEl);
+		nombreEdEl.setEditable(false);
 
 		panelReservas.add(apellidoLabel);
-		apellidoEd = new JTextField(20);
-		panelReservas.add(apellidoEd);
-		apellidoEd.setEditable(false);
+		apellidoEdEl = new JTextField(20);
+		panelReservas.add(apellidoEdEl);
+		apellidoEdEl.setEditable(false);
 		
 		panelReservas.add(dniLabel);
-		dniEd = new JTextField(20);
-		panelReservas.add(dniEd);
-		dniEd.setEditable(false);
+		dniEdEl = new JTextField(20);
+		panelReservas.add(dniEdEl);
+		dniEdEl.setEditable(false);
 		
 		panelReservas.add(numTelefonoLabel);
-		numTelefonoEd = new JTextField(20);
-		panelReservas.add(numTelefonoEd);
-		numTelefonoEd.setEditable(false);
+		numTelefonoEdEl = new JTextField(20);
+		panelReservas.add(numTelefonoEdEl);
+		numTelefonoEdEl.setEditable(false);
 		
 		panelReservas.add(correoElectronicoLabel);
-		correoElectronicoEd = new JTextField(20);
-		panelReservas.add(correoElectronicoEd);
-		correoElectronicoEd.setEditable(false);
+		correoElectronicoEdEl = new JTextField(20);
+		panelReservas.add(correoElectronicoEdEl);
+		correoElectronicoEdEl.setEditable(false);
 		
 		panelReservas.add(comensalesLabel);
-		comensalesEd = new JTextField(20);
-		panelReservas.add(comensalesEd);
-		comensalesEd.setEditable(false);
+		comensalesEdEl = new JTextField(20);
+		panelReservas.add(comensalesEdEl);
+		comensalesEdEl.setEditable(false);
 		
 		panelReservas.add(fechaHoraLabel);
-		fechaHoraEd = new JTextField(20);
-		panelReservas.add(fechaHoraEd);
-		fechaHoraEd.setEditable(false);
+		fechaHoraEdEl = new JTextField(20);
+		panelReservas.add(fechaHoraEdEl);
+		fechaHoraEdEl.setEditable(false);
 			
 		panelReservas.add(botonSeleccionEliminar);
 			
@@ -309,12 +325,14 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 		return panelReservas;
 	}
 	
+	/*******************************************************************************************/
 	
 	private JPanel crearPanelMostrarMenu() {
 		// TODO Auto-generated method stub
 		JPanel panelMostrarMenu = new JPanel(new BorderLayout());
 	    panelMostrarMenu.setPreferredSize(new Dimension(700, 100));
 	    actualizarListaMenu(panelMostrarMenu);
+        panelMostrarMenu.setBackground(new Color(190, 148, 250));
 	    return panelMostrarMenu;
 	}
 
@@ -355,6 +373,8 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 	    this.panelMenus.setVisible(true);
 		
 	}
+	
+	/*******************************************************************************************/
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -375,7 +395,7 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 			String feho = fechaHora.getText();
 
 			ReservaVO r = new ReservaVO(0, name, ape, dn, num, cor, com, feho);
-			empleadoControlador.addReserva(r);
+			empleadoControlador.aniadirReserva(r);
 			crearPanelMostrarReserva();
 			
 			nombre.setText("");
@@ -401,7 +421,7 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 				return;
 			}
 			
-			nombreEd.setText(r.getNombre());
+			nombreEd.setText(r.getNombre() + "");
 			nombreEd.setEditable(true);
 			apellidoEd.setText(r.getApellido() + "");
 			apellidoEd.setEditable(true);
@@ -433,10 +453,10 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 			r.setComensales(com);
 			r.setFechaHora(feho);
 
-			empleadoControlador.updateReserva(r);
+			empleadoControlador.actualizarReserva(r);
 			
 			nombreEd.setEditable(false);
-			nombreEd.setText(r.getNombre());
+			nombreEd.setText(r.getNombre() + "");
 			apellidoEd.setEditable(false);
 			apellidoEd.setText(r.getApellido() + "");
 			dniEd.setEditable(false);
@@ -467,29 +487,27 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 				return;
 			}
 			
-			nombreEd.setText(r.getNombre());
-			nombreEd.setEditable(false);
-			apellidoEd.setText(r.getApellido() + "");
-			apellidoEd.setEditable(false);
-			dniEd.setText(r.getDni() + "");
-			dniEd.setEditable(false);
-			numTelefonoEd.setText(r.getTelefono() + "");
-			numTelefonoEd.setEditable(false);
-			correoElectronicoEd.setText(r.getCorreo() + "");
-			correoElectronicoEd.setEditable(false);
-			comensalesEd.setText(r.getComensales() + "");
-			comensalesEd.setEditable(false);
-			fechaHoraEd.setText(r.getFechaHora() + "");
-			fechaHoraEd.setEditable(false);
+			nombreEdEl.setText(r.getNombre() + "");
+			nombreEdEl.setEditable(false);
+			apellidoEdEl.setText(r.getApellido() + "");
+			apellidoEdEl.setEditable(false);
+			dniEdEl.setText(r.getDni() + "");
+			dniEdEl.setEditable(false);
+			numTelefonoEdEl.setText(r.getTelefono() + "");
+			numTelefonoEdEl.setEditable(false);
+			correoElectronicoEdEl.setText(r.getCorreo() + "");
+			correoElectronicoEdEl.setEditable(false);
+			comensalesEdEl.setText(r.getComensales() + "");
+			comensalesEdEl.setEditable(false);
+			fechaHoraEdEl.setText(r.getFechaHora() + "");
+			fechaHoraEdEl.setEditable(false);
 
 		} else if (e.getSource() == this.eliminar) {
 			
 			
 			
 			
-		} else {
-			
-		}
+		} 
     }
 
 	

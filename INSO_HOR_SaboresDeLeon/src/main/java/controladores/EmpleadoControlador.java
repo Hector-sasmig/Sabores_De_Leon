@@ -1,10 +1,11 @@
 package main.java.controladores;
 
-import main.java.modelo.dao.*;
-import main.java.modelo.vo.*;
-import main.java.vista.EmpleadoVista;
-
 import java.util.ArrayList;
+
+import main.java.modelo.dao.MenuDAO;
+import main.java.modelo.dao.ReservaDAO;
+import main.java.modelo.vo.MenuVO;
+import main.java.modelo.vo.ReservaVO;
 
 public class EmpleadoControlador {
     private ArrayList<ReservaVO> reservas;
@@ -37,7 +38,16 @@ public class EmpleadoControlador {
         return null;
     }
     
-    public void addReserva(ReservaVO r) {
+    public ReservaVO getReserva(int id) {
+        for (ReservaVO r : reservas) {
+            if (r.getIdReserva() == id) {
+                return r;
+            }
+        }
+        return null;
+    }
+    
+    public void aniadirReserva(ReservaVO r) {
     	ReservaDAO rDao = new ReservaDAO();
         try {
         	rDao.add(r);
@@ -48,7 +58,7 @@ public class EmpleadoControlador {
         }
     }
     
-    public void updateReserva(ReservaVO r) {
+    public void actualizarReserva(ReservaVO r) {
     	ReservaDAO rDao = new ReservaDAO();
         try {
             rDao.update(r);
@@ -58,13 +68,8 @@ public class EmpleadoControlador {
         }
     }
     
-    public ReservaVO getReserva(int id) {
-        for (ReservaVO r : reservas) {
-            if (r.getIdReserva() == id) {
-                return r;
-            }
-        }
-        return null;
+    public void eliminarReserva(int id) {
+    	//No se si va con id o con una reservaVO, ni idea
     }
 
     public ArrayList<MenuVO> getMenus() {
