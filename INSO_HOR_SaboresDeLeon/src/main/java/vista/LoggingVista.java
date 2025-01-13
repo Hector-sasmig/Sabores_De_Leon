@@ -5,23 +5,25 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.ColorUIResource;
 
-import main.java.controladores.EmpleadoControlador;
 import main.java.controladores.RestauranteLoggingControlador;
 
 public class LoggingVista extends JFrame implements ActionListener {
@@ -32,6 +34,8 @@ public class LoggingVista extends JFrame implements ActionListener {
     private RestauranteLoggingControlador restaurante;
     private JTextField usuario;
     private JPasswordField contrasena;
+    private JLabel logoLabel;
+    private ImageIcon originalIcon;
 
     public LoggingVista() {
         // Configuración del tema de color
@@ -53,6 +57,18 @@ public class LoggingVista extends JFrame implements ActionListener {
         mainPanel.setLayout(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        // Panel de encabezado con la imagen de la compañía
+        originalIcon = new ImageIcon(LoggingVista.class.getResource("/Logo_SaboresDeLeon.jpeg"));
+        logoLabel = new JLabel(scaleImageIcon(originalIcon, 300, 300));
+        headerPanel.add(logoLabel);
+
+        // Slider para cambiar el tamaño de la imagen
+        JSlider slider = new JSlider(50, 300, 100); // Tamaño entre 50 y 300 píxeles
+        slider.addChangeListener(e -> {
+            int size = slider.getValue();
+            logoLabel.setIcon(scaleImageIcon(originalIcon, size, size));
+        });
+        
         // Panel de inicio de sesión
         JPanel loginPanel = new JPanel();
         loginPanel.setLayout(new GridBagLayout());
@@ -101,6 +117,11 @@ public class LoggingVista extends JFrame implements ActionListener {
 
         // Inicialización del controlador
         restaurante = new RestauranteLoggingControlador();
+    }
+    
+    private ImageIcon scaleImageIcon(ImageIcon icon, int width, int height) {
+        Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
     }
 
     @Override

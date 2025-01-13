@@ -69,7 +69,14 @@ public class EmpleadoControlador {
     }
     
     public void eliminarReserva(int id) {
-    	//No se si va con id o con una reservaVO, ni idea
+		ReservaDAO rDao = new ReservaDAO();
+		try {
+			rDao.delete(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			
+		}
+    	
     }
 
     public ArrayList<MenuVO> getMenus() {

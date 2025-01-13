@@ -38,6 +38,7 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 	JTextField nombreEd, apellidoEd, dniEd, numTelefonoEd, correoElectronicoEd, comensalesEd, fechaHoraEd;
 	JTextField nombreEdEl, apellidoEdEl, dniEdEl, numTelefonoEdEl, correoElectronicoEdEl, comensalesEdEl, fechaHoraEdEl;
 	MenuVO m;
+	int id = -1;
 	JTable catalogTable;
 
     public EmpleadoVista() {
@@ -147,7 +148,7 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 	    	pestanasReservas.addTab("Lista Reservas", panelActualizado);
 	    }
 
-	    this.panelReservas.setVisible(true);
+	    this.pestanasReservas.setVisible(true);
 		
 	}
 
@@ -479,7 +480,7 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 				return;
 			}
 			
-			int id = Integer.parseInt(idtxt);
+			id = Integer.parseInt(idtxt);
 			r = empleadoControlador.getReserva(id);
 			
 			if (r == null) {
@@ -503,9 +504,10 @@ public class EmpleadoVista extends JFrame implements ActionListener{
 			fechaHoraEdEl.setEditable(false);
 
 		} else if (e.getSource() == this.eliminar) {
+			this.empleadoControlador.eliminarReserva(id);
+			id=-1;
 			
-			
-			
+			crearPanelMostrarReserva();
 			
 		} 
     }

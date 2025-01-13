@@ -76,7 +76,13 @@ public class GerenteControlador {
     }
     
     public void eliminarMenu(int id) {
-    	
+		MenuDAO mDao= new MenuDAO();
+		try {
+			mDao.delete(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			
+		}
     }
     
     public ArrayList<EmpleadoVO> getEmpleados() {
