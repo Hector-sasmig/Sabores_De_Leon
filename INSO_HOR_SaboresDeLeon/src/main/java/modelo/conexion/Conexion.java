@@ -12,10 +12,11 @@ public class Conexion {
     private Connection conexion;
 
     public Conexion() {
-        this.dataBaseURL = "jdbc:mysql://localhost:3310/sabores_de_leon";
+        // Ajusta el puerto si es necesario, usualmente 3306 es el predeterminado
+        this.dataBaseURL = "jdbc:mysql://localhost:3306/sabores_de_leon";  // Cambié el puerto a 3306
         this.driverName = "com.mysql.cj.jdbc.Driver";
-        this.user = "root"; 
-        this.pass = "";     
+        this.user = "root";  // Asegúrate de que el usuario sea correcto
+        this.pass = "root";      // Cambia la contraseña si es necesario
     }
 
     public void abrirConexion() throws Exception {
